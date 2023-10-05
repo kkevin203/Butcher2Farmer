@@ -5,7 +5,7 @@ using Services;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using Microsoft.Extensions.DependencyInjection;
-using ButcherApp.Data;
+using Butcher2Farmer.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +24,8 @@ builder.Services.AddDbContext<ButcherDatabase>(options =>
 //builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<AnimalService>();
 builder.Services.AddScoped<ButcherService>();
-builder.Services.AddSingleton<FarmerService>();
+builder.Services.AddScoped<FarmerService>();
+
 
 //builder.Services.AddDbContext<ButcherDatabase>();
 

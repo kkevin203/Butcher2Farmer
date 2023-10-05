@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Services
 {
-  
+
 
     public class AnimalService
     {
 
         ButcherDatabase _butcherDatabase;
-        public AnimalService(ButcherDatabase butcherDatabase) 
-        { 
+        public AnimalService(ButcherDatabase butcherDatabase)
+        {
             _butcherDatabase = butcherDatabase ?? throw new ArgumentNullException(nameof(butcherDatabase));
         }
 
@@ -33,12 +33,12 @@ namespace Services
             if (animal.Id == 0)
             {
                 _butcherDatabase.Animals.Add(animal);
-                _butcherDatabase.SaveChanges();                
+                _butcherDatabase.SaveChanges();
             }
             else
             {
                 UpdateAnimal(animal);
-            
+
             }
         }
         public void DeleteAnimal(int animalId)
