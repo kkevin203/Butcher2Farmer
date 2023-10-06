@@ -33,12 +33,18 @@
             {
                 <div class="text-danger">La race de l'animal est requise.</div>
             }
+        </div> <div class="form-group">
+            <input class="form-control" @bind="animalEnEdition.Categorization" placeholder="Categorization de l'animal" />
+            @if (isCategorizationInvalid)
+            {
+                <div class="text-danger">La race de l'animal est requise.</div>
+            }
         </div>
         <div class="form-group">
-            <input class="form-control" @bind="animalEnEdition.Categorization" placeholder="Categorisation de l'animal" />
-            @if (isCategorisationInvalid)
+            <input class="form-control" @bind="animalEnEdition.weight" placeholder="le poid de l'animal" />
+            @if (isweightInvalid)
             {
-                <div class="text-danger">La Categorisation de l'animal est requise.</div>
+                <div class="text-danger">Le poid de l'animal est requise.</div>
             }
         </div>
         <div class="form-group">
@@ -48,6 +54,7 @@
                 <div class="text-danger">Le nom de l'éleveur est requis.</div>
             }
         </div>
+
         <div class="form-group">
             <input class="form-control" @bind="animalEnEdition.Description" placeholder="Description de l'animal" />
             @if (isDescriptionInvalid)
@@ -85,11 +92,13 @@ else
 }
 
 @code {
+    private List<Database.Entities.Farmer> farmers = new List<Database.Entities.Farmer>();
     private List<Animal> animaux = new List<Animal>();
     private Animal animalEnEdition = new Animal();
     private bool isNameInvalid = false;
     private bool isRaceInvalid = false;
-    private bool isCategorisationInvalid = false;
+    private bool isCategorizationInvalid = false;
+    private bool isweightInvalid = false;
     private bool isProduteurNameInvalid = false;
     private bool isPhotoInvalid = false;
     private bool isDescriptionInvalid = false;
@@ -122,6 +131,7 @@ else
                 Name = animal.Name,
                 Race = animal.Race,
                 Categorization = animal.Categorization,
+                weight = animal.weight,
                 FarmerName = animal.FarmerName,
                 PhotoPath = animal.PhotoPath,
                 Description = animal.Description,
@@ -132,12 +142,22 @@ else
     {
         isNameInvalid = string.IsNullOrWhiteSpace(animalEnEdition.Name);
         isRaceInvalid = string.IsNullOrWhiteSpace(animalEnEdition.Race);
-        isCategorisationInvalid = string.IsNullOrWhiteSpace(animalEnEdition.Categorization);
+        isCategorizationInvalid = string.IsNullOrWhiteSpace(animalEnEdition.Categorization);
+
+        if (animalEnEdition.weight == null || string.IsNullOrWhiteSpace(animalEnEdition.weight.ToString()))
+        {
+            isweightInvalid = true;
+        }
+        else
+        {
+            isweightInvalid = false;
+        }
+
         isProduteurNameInvalid = string.IsNullOrWhiteSpace(animalEnEdition.FarmerName);
         isDescriptionInvalid = string.IsNullOrWhiteSpace(animalEnEdition.Description);
         isStablingInvalid = string.IsNullOrWhiteSpace(animalEnEdition.stabling);
 
-        if (isNameInvalid || isRaceInvalid || isProduteurNameInvalid)
+        if (isNameInvalid || isRaceInvalid || isProduteurNameInvalid || isweightInvalid)
         {
             return;
         }
@@ -155,9 +175,11 @@ else
         isNameInvalid = false;
         isRaceInvalid = false;
         isProduteurNameInvalid = false;
+        isweightInvalid = false; 
 
         await SwitchAnimaux();
     }
+
 
 
     private async Task DeleteAnimal(int animalId)

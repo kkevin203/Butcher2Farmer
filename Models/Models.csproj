@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Compile Remove="animalForm.cs" />
+    <Compile Remove="Class1.cs" />
+    <Compile Remove="Farmer.cs" />
   </ItemGroup>
 
   <ItemGroup>

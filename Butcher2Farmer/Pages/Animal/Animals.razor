@@ -1,7 +1,11 @@
 ﻿@page "/animals"
 
+@using Database.Entities;
+
 @inject AnimalService animalService;
+@inject FarmerService farmerService
 @inject IJSRuntime JSRuntime
+
 
 
 <h3>Animals</h3>
@@ -32,8 +36,12 @@ else
 
 @code {
     private List<Database.Entities.Animal> animals = new();
+    private List<Farmer> farmers = new();
 
     private IJSRuntime jsRuntime { get; set; }
+
+    private List<Database.Entities.Farmer> filteredFarmers = new List<Database.Entities.Farmer>();
+
 
     private async Task changerImage(int animalId)
     {
@@ -49,6 +57,8 @@ else
     protected override async Task OnInitializedAsync()
     {
         animals = await animalService.GetAnimalsAsync();
+        farmers = await farmerService.GetFarmersAsync();
+
 
         await JSRuntime.InvokeVoidAsync("console.log", "Hello from Blazor!");
 

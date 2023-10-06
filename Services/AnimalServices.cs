@@ -3,6 +3,10 @@ using Database;
 using Database.Entities;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Services
 {
@@ -10,11 +14,13 @@ namespace Services
 
     public class AnimalService
     {
+        private readonly ButcherDatabase _butcherDatabase;
+        private readonly FarmerService _farmerService;
 
-        ButcherDatabase _butcherDatabase;
-        public AnimalService(ButcherDatabase butcherDatabase)
+        public AnimalService(ButcherDatabase butcherDatabase, FarmerService farmerService)
         {
             _butcherDatabase = butcherDatabase ?? throw new ArgumentNullException(nameof(butcherDatabase));
+            _farmerService = farmerService ?? throw new ArgumentNullException(nameof(farmerService));
         }
 
         public async Task<List<Animal>> GetAnimalsAsync()
@@ -28,19 +34,32 @@ namespace Services
             var animal = await _butcherDatabase.Animals.FirstOrDefaultAsync(a => a.Id == animalId);
             return animal;
         }
+
         public void AddAnimal(Animal animal)
         {
+            if (animal.FarmerId == 0)
+            {
+                return;
+            }
+
+            var selectedFarmer = _farmerService.GetFarmerById(animal.FarmerId);
+            if (selectedFarmer != null)
+            {
+                animal.FarmerName = $"{selectedFarmer.FirstName} {selectedFarmer.Name}";
+            }
+
             if (animal.Id == 0)
             {
                 _butcherDatabase.Animals.Add(animal);
-                _butcherDatabase.SaveChanges();
             }
             else
             {
                 UpdateAnimal(animal);
-
             }
+
+            _butcherDatabase.SaveChanges();
         }
+
         public void DeleteAnimal(int animalId)
         {
             var animalToDelete = _butcherDatabase.Animals.FirstOrDefault(a => a.Id == animalId);

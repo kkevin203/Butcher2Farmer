@@ -18,6 +18,7 @@ namespace Database.Entities
         public int? weight { get; set; }
         public string? Description { get; set; }
         public string? FarmerName { get; set; }
+        public int FarmerId { get; set; }
         public string? PhotoPath { get; set; }
         public string? Categorization { get; set; }
         public string? stabling { get; set; }

@@ -1,7 +1,14 @@
 ﻿@page "/farmer"
-@inject FarmerService farmerService ;
+@using Database.Entities;
+@using Microsoft.AspNetCore.Components;
 
-<h3>Farmer</h3>
+@inject AnimalService animalService
+@inject FarmerService farmerService
+
+<h3>Farmers</h3>
+
+<input type="text" @bind="filterText" @oninput="FilterFarmers" placeholder="Search by name..." />
+
 @if (farmers == null)
 {
     <p><em>Loading...</em></p>
@@ -14,16 +21,17 @@ else
                 <th>Id</th>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in farmers)
+            @foreach (var farmer in filteredFarmers)
             {
                 <tr>
-                    <td>@forecast.Id</td>
-                    <td>@forecast.Name</td>
-                    <td>@forecast.Email</td>
-
+                    <td>@farmer.Id</td>
+                    <td>@farmer.Name</td>
+                    <td>@farmer.Email</td>
+                    <button @onclick="() => SelectFarmer(farmer)">Select Farmer</button>
                 </tr>
             }
         </tbody>
@@ -31,11 +39,38 @@ else
 }
 
 @code {
-    List<Database.Entities.Farmer> farmers = new();
-    protected override Task OnInitializedAsync()
-    {
-        farmers = farmerService.GetAll();
+    List<Database.Entities.Farmer> farmers;
+    List<Database.Entities.Farmer> filteredFarmers = new List<Database.Entities.Farmer>();
+    Animal animalEnEdition = new Animal();
 
-        return base.OnInitializedAsync();
+    string filterText = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        farmers = await farmerService.GetAllAsync();
+    }
+
+    private void SelectFarmer(Database.Entities.Farmer selectedFarmer)
+    {
+        animalEnEdition.FarmerName = selectedFarmer.Name;
+        filteredFarmers.Clear();
+    }
+
+
+
+    private void FilterFarmers()
+    {
+        if (string.IsNullOrWhiteSpace(filterText))
+        {
+            filteredFarmers = farmers;
+        }
+        else
+        {
+            filteredFarmers = farmers
+                .Where(farmer =>
+                    $"{farmer.Name}"
+                    .Contains(filterText, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
     }
 }
