@@ -12,7 +12,7 @@ namespace Database.Entities
     {
 
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public float? Price { get; set; }
         public string? Race { get; set; }
         public int? weight { get; set; }

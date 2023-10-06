@@ -5,13 +5,16 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using Database.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Database.Entities
 {
+    [PrimaryKey("Id")]
+
     public class Farmer : Person
     {
-        public string FarmerId { get; set; }
-        public List<Animal> Animals { get; set; }
+        public int FarmerId { get; set; }
+        public List<Animal>? Animals { get; set; }
 
     }
 }
