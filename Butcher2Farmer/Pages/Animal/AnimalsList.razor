@@ -35,10 +35,31 @@
             }
         </div>
         <div class="form-group">
+            <input class="form-control" @bind="animalEnEdition.Categorization" placeholder="Categorisation de l'animal" />
+            @if (isCategorisationInvalid)
+            {
+                <div class="text-danger">La Categorisation de l'animal est requise.</div>
+            }
+        </div>
+        <div class="form-group">
             <input class="form-control" @bind="animalEnEdition.FarmerName" placeholder="Eleveur de l'animal" />
             @if (isProduteurNameInvalid)
             {
                 <div class="text-danger">Le nom de l'éleveur est requis.</div>
+            }
+        </div>
+        <div class="form-group">
+            <input class="form-control" @bind="animalEnEdition.Description" placeholder="Description de l'animal" />
+            @if (isDescriptionInvalid)
+            {
+                <div class="text-danger">La Description est requise.</div>
+            }
+        </div>   
+        <div class="form-group">
+            <input class="form-control" @bind="animalEnEdition.stabling" placeholder="mise en stabulation de l'animal' de l'animal" />
+            @if (isStablingInvalid)
+            {
+                <div class="text-danger">Le choix de la mise en stabulation est requise.</div>
             }
         </div>
         <div class="form-group">
@@ -68,8 +89,11 @@ else
     private Animal animalEnEdition = new Animal();
     private bool isNameInvalid = false;
     private bool isRaceInvalid = false;
+    private bool isCategorisationInvalid = false;
     private bool isProduteurNameInvalid = false;
     private bool isPhotoInvalid = false;
+    private bool isDescriptionInvalid = false;
+    private bool isStablingInvalid = false;
     private bool FarmerIsConnected = true;
 
 
@@ -97,18 +121,21 @@ else
                 Id = animal.Id,
                 Name = animal.Name,
                 Race = animal.Race,
-                Categorisation = animal.Categorisation,
+                Categorization = animal.Categorization,
                 FarmerName = animal.FarmerName,
                 PhotoPath = animal.PhotoPath,
                 Description = animal.Description,
-                Stabu = animal.Stabu
+                stabling = animal.stabling
             };
 
     private async Task ValiderAnimal()
     {
         isNameInvalid = string.IsNullOrWhiteSpace(animalEnEdition.Name);
         isRaceInvalid = string.IsNullOrWhiteSpace(animalEnEdition.Race);
+        isCategorisationInvalid = string.IsNullOrWhiteSpace(animalEnEdition.Categorization);
         isProduteurNameInvalid = string.IsNullOrWhiteSpace(animalEnEdition.FarmerName);
+        isDescriptionInvalid = string.IsNullOrWhiteSpace(animalEnEdition.Description);
+        isStablingInvalid = string.IsNullOrWhiteSpace(animalEnEdition.stabling);
 
         if (isNameInvalid || isRaceInvalid || isProduteurNameInvalid)
         {
