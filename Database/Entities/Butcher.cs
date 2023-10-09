@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace Database.Entities
 {
-    [PrimaryKey("Id")]
 
     public class Butcher : Person
     {

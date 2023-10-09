@@ -7,7 +7,7 @@
 
 <h3>Farmers</h3>
 
-<input type="text" @bind="filterText" @oninput="FilterFarmers" placeholder="Search by name..." />
+<input type="text" @oninput="FilterFarmers" placeholder="Search by name..." />
 
 @if (farmers == null)
 {
@@ -43,11 +43,12 @@ else
     List<Database.Entities.Farmer> filteredFarmers = new List<Database.Entities.Farmer>();
     Animal animalEnEdition = new Animal();
 
-    string filterText = "";
+    //string filterText = "";
 
     protected override async Task OnInitializedAsync()
     {
         farmers = await farmerService.GetAllAsync();
+        FilterFarmers(new ChangeEventArgs());
     }
 
     private void SelectFarmer(Database.Entities.Farmer selectedFarmer)
@@ -58,9 +59,11 @@ else
 
 
 
-    private void FilterFarmers()
+
+
+    private void FilterFarmers(ChangeEventArgs args)
     {
-        if (string.IsNullOrWhiteSpace(filterText))
+        if (string.IsNullOrWhiteSpace(args.Value?.ToString()))
         {
             filteredFarmers = farmers;
         }
@@ -69,7 +72,7 @@ else
             filteredFarmers = farmers
                 .Where(farmer =>
                     $"{farmer.Name}"
-                    .Contains(filterText, StringComparison.OrdinalIgnoreCase))
+                    .Contains(args.Value?.ToString(), StringComparison.OrdinalIgnoreCase))
                 .ToList();
         }
     }

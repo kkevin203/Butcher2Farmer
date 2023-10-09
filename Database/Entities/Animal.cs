@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Database.Entities
 {
-    [PrimaryKey("Id")]
     public class Animal
     {
-
         public int Id { get; set; }
         public string? Name { get; set; }
         public float? Price { get; set; }

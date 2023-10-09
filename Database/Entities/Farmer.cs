@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Database.Entities
 {
-    [PrimaryKey("Id")]
 
     public class Farmer : Person
     {

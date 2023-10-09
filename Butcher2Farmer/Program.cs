@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using Microsoft.Extensions.DependencyInjection;
 using Butcher2Farmer.Data;
+using Microsoft.AspNetCore.Identity;
+using ButcherApp.Data;
+using Database.Entities;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +18,7 @@ builder.Services.AddRazorPages();
 /*builder.Services.AddDbContext<ButcherAppContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("ButcherAppContext") ?? throw new InvalidOperationException("Connection string 'ButcherAppContext' not found.")));*/
 builder.Services.AddServerSideBlazor();
+
 
 // Add DbContext service.
 builder.Services.AddDbContext<ButcherDatabase>(options =>
@@ -65,7 +70,7 @@ void CreateDbIfNotExists(IApplicationBuilder app)
         try
         {
             var context = services.GetRequiredService<ButcherDatabase>();
-            //context.Database.EnsureDeleted();
+            context.Database.EnsureDeleted();
             context.Database.OpenConnection();
             context.Database.EnsureCreated();
         }

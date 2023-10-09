@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Butcher2Farmer", "Butcher2Farmer\Butcher2Farmer.csproj", "{F4157CA6-1D7E-4938-8F0B-FEDF0A516EF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Butcher2Farmer", "Butcher2Farmer\Butcher2Farmer.csproj", "{F4157CA6-1D7E-4938-8F0B-FEDF0A516EF7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "Database\Database.csproj", "{134F11C4-9CD9-4A8B-A8E3-8E12DCDAA878}"
 EndProject
