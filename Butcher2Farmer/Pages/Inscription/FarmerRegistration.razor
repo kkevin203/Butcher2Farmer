@@ -1,0 +1,109 @@
+﻿@page "/FarmerRegistration"
+
+@using Database
+@using Database.Entities;
+@using Microsoft.AspNetCore.Components.Forms
+
+@inject NavigationManager NavigationManager
+@inject ButcherDatabase dbContext
+@inject EditContext EditContext
+
+<h3>Inscription Agriculteur</h3>
+
+<EditForm EditContext="EditContext" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="FirstName">Prénom</label>
+        <input type="text" id="FirstName" class="form-control" @bind="farmer.FirstName" />
+        <ValidationMessage For="@(() => farmer.FirstName)" />
+    </div>
+
+    <div class="form-group">
+        <label for="Name">Nom de famille</label>
+        <input type="text" id="Name" class="form-control" @bind="farmer.Name" />
+        <ValidationMessage For="@(() => farmer.Name)" />
+
+    </div>  
+    <div class="form-group">
+        <label for="Age">Age</label>
+        <input type="text" id="Age" class="form-control" @bind="farmer.Age" />
+        <ValidationMessage For="@(() => farmer.Age)" />
+        Age
+    </div>
+    <div class="form-group">
+        <label for="Adress">Adresse</label>
+        <input type="text" id="Adress" class="form-control" @bind="farmer.Adress" />
+        <ValidationMessage For="@(() => farmer.Adress)" />
+
+    </div> 
+    <div class="form-group">
+        <label for="Tel">Tel</label>
+        <input type="text" id="Tel" class="form-control" @bind="farmer.Tel" />
+        <ValidationMessage For="@(() => farmer.Tel)" />
+
+    </div>
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input type="text" id="Email" class="form-control" @bind="farmer.Email" />
+        <ValidationMessage For="@(() => farmer.Email)" />
+
+    </div>
+    <div class="form-group">
+        <label for="Adress">Certifications</label>
+        <input type="text" id="Certifications" class="form-control" @bind="farmer.Certifications" />
+        <ValidationMessage For="@(() => farmer.Certifications)" />
+
+    </div> 
+    <div class="form-group">
+        <label for="AnimalType">AnimalType</label>
+        <input type="text" id="AnimalType" class="form-control" @bind="farmer.AnimalType" />
+        <ValidationMessage For="@(() => farmer.AnimalType)" />
+
+    </div>
+    <div class="form-group">
+        <label for="farmeSize">farmeSize</label>
+        <input type="text" id="farmeSize" class="form-control" @bind="farmer.farmeSize" />
+        <ValidationMessage For="@(() => farmer.farmeSize)" />
+
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">S'inscrire</button>
+</EditForm>
+
+
+@code {
+    private Farmer farmer = new Farmer();
+
+    private bool isSubmitted = false;
+
+
+    private async Task HandleSubmit()
+    {
+        if (EditContext.Validate())
+        {
+            {
+                dbContext.Farmers.Add(farmer);
+                await dbContext.SaveChangesAsync();
+                NavigationManager.NavigateTo("/Confirmation");
+            }
+
+        }
+    }
+
+
+
+    private bool IsValid()
+    {
+    
+        if (string.IsNullOrEmpty(farmer.FirstName) || string.IsNullOrEmpty(farmer.Name))
+        {
+      
+            return !string.IsNullOrEmpty(farmer.FirstName) && !string.IsNullOrEmpty(farmer.Name);
+
+        }
+
+        return true;
+    }
+}
+

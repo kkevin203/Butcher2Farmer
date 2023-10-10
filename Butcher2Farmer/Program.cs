@@ -11,14 +11,17 @@ using ButcherApp.Data;
 using Database.Entities;
 using Microsoft.Extensions.Configuration;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 /*builder.Services.AddDbContext<ButcherAppContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("ButcherAppContext") ?? throw new InvalidOperationException("Connection string 'ButcherAppContext' not found.")));*/
 builder.Services.AddServerSideBlazor();
-
 
 // Add DbContext service.
 builder.Services.AddDbContext<ButcherDatabase>(options =>
@@ -57,6 +60,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.MapBlazorHub();
+
 app.MapFallbackToPage("/_Host");
 
 CreateDbIfNotExists(app);
@@ -77,7 +81,7 @@ void CreateDbIfNotExists(IApplicationBuilder app)
         catch (Exception ex)
         {
             var logger = services.GetRequiredService<ILogger<Program>>();
-            logger.LogError(ex, "Une erreur s'est produite lors de la cr�ation de la base de donn�es.");
+            logger.LogError(ex, "Une erreur s'est produite lors de la création de la base de données.");
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Database
 {
     public class ButcherDatabase : DbContext
     {
-        public ButcherDatabase(DbContextOptions options) : base(options)
+        public ButcherDatabase(DbContextOptions<ButcherDatabase> options) : base(options)
         {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -11,3 +11,5 @@
         }
         return null;
     }
+    socket.addEventListener('open', function (event) {
+    });
