@@ -3,14 +3,16 @@
 @using Database
 @using Database.Entities;
 @using Microsoft.AspNetCore.Components.Forms
+@using Models;
 
 @inject NavigationManager NavigationManager
+@inject FarmerService farmerService
+
 @inject ButcherDatabase dbContext
-@inject EditContext EditContext
 
 <h3>Inscription Agriculteur</h3>
 
-<EditForm EditContext="EditContext" OnValidSubmit="HandleSubmit">
+<EditForm Model="@farmers" OnValidSubmit="HandleSubmit">
     <DataAnnotationsValidator />
     <div class="form-group">
         <label for="FirstName">Prénom</label>
@@ -27,8 +29,7 @@
     <div class="form-group">
         <label for="Age">Age</label>
         <input type="text" id="Age" class="form-control" @bind="farmer.Age" />
-        <ValidationMessage For="@(() => farmer.Age)" />
-        Age
+        <ValidationMessage For="@(() => farmer.Age)" />        
     </div>
     <div class="form-group">
         <label for="Adress">Adresse</label>
@@ -61,9 +62,9 @@
 
     </div>
     <div class="form-group">
-        <label for="farmeSize">farmeSize</label>
-        <input type="text" id="farmeSize" class="form-control" @bind="farmer.farmeSize" />
-        <ValidationMessage For="@(() => farmer.farmeSize)" />
+        <label for="farmerSize">farmerSize</label>
+        <input type="text" id="farmerSize" class="form-control" @bind="farmer.farmerSize" />
+        <ValidationMessage For="@(() => farmer.farmerSize)" />
 
     </div>
 
@@ -74,36 +75,33 @@
 
 @code {
     private Farmer farmer = new Farmer();
+    private List<Database.Entities.Farmer> farmers = new();
+    private List<Database.Entities.Farmer> filteredFarmers = new List<Database.Entities.Farmer>();
+
+
 
     private bool isSubmitted = false;
 
 
     private async Task HandleSubmit()
     {
-        if (EditContext.Validate())
-        {
-            {
-                dbContext.Farmers.Add(farmer);
-                await dbContext.SaveChangesAsync();
-                NavigationManager.NavigateTo("/Confirmation");
-            }
+           
+            dbContext.Farmers.Add(farmer);
+            await dbContext.SaveChangesAsync();
 
-        }
+            farmers.Add(farmer);
+
+            farmer = new Farmer();
+
+            NavigationManager.NavigateTo("/animals");
+       
     }
 
-
-
-    private bool IsValid()
+    protected override async Task OnInitializedAsync()
     {
-    
-        if (string.IsNullOrEmpty(farmer.FirstName) || string.IsNullOrEmpty(farmer.Name))
-        {
-      
-            return !string.IsNullOrEmpty(farmer.FirstName) && !string.IsNullOrEmpty(farmer.Name);
-
-        }
-
-        return true;
+        farmers = await farmerService.GetFarmersAsync();
     }
+
+    
 }
 

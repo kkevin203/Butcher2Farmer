@@ -20,7 +20,7 @@ namespace Database.Entities
         [Required(ErrorMessage = "Le type d'animal est requis.")]
         public string AnimalType { get; set; } // type d'animal
         [Required(ErrorMessage = "La quantité de bête est requis.")]
-        public string farmeSize { get; set; } // taille de l'élevage
+        public string farmerSize { get; set; } // taille de l'élevage
 
 
     }

@@ -74,7 +74,7 @@ void CreateDbIfNotExists(IApplicationBuilder app)
         try
         {
             var context = services.GetRequiredService<ButcherDatabase>();
-            context.Database.EnsureDeleted();
+            //context.Database.EnsureDeleted();
             context.Database.OpenConnection();
             context.Database.EnsureCreated();
         }

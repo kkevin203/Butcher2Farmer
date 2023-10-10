@@ -39,7 +39,7 @@ namespace Services
         {
             if (animal.FarmerId == 0)
             {
-                return;
+                animal.FarmerId = 1;
             }
 
             var selectedFarmer = _farmerService.GetFarmerById(animal.FarmerId);
