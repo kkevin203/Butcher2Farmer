@@ -3,10 +3,15 @@
 @using Database
 @using Database.Entities;
 @using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Identity;
 @using Models;
+@using System.Security.Claims;
 
+@inject ButcherDatabase dbContext
 @inject NavigationManager NavigationManager
 @inject ButcherService ButcherService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<User> UserManager
 
 <h3>ButcherRegistration</h3>
 
@@ -74,18 +79,42 @@
 @code {
     private Butcher butcher = new Butcher();
     private List<Database.Entities.Butcher> butchers = new List<Database.Entities.Butcher>(); 
-
     private bool isSubmitted = false;
-
+    private string errorMessage = null;
 
     private async Task HandleSubmit()
     {
+        try
+        {
+            await ButcherService.CreateButcherAsync(butcher);
+            isSubmitted = true;
 
-        await ButcherService.CreateButcherAsync(butcher);
-        isSubmitted = true;
+            var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authenticationState.User;
 
-        NavigationManager.NavigateTo("/animals");
+            if (user != null)
+            {
+                var newUser = new User
+                    {
+                        Email = user.FindFirst(ClaimTypes.Email)?.Value,
+                    };
 
+                var result = await UserManager.CreateAsync(newUser);
+
+                if (result.Succeeded)
+                {
+                    NavigationManager.NavigateTo("/addanimal");
+                }
+                else
+                {
+                    errorMessage = "Erreur lors de la création de l'utilisateur.";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Une erreur s'est produite : " + ex.Message;
+        }
     }
 
     protected override async Task OnInitializedAsync()
@@ -95,4 +124,6 @@
 
 
 }
+
+
 

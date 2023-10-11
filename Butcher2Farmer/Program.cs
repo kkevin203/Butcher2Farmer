@@ -10,8 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using ButcherApp.Data;
 using Database.Entities;
 using Microsoft.Extensions.Configuration;
-
-
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +32,12 @@ builder.Services.AddDbContext<ButcherDatabase>(options =>
 builder.Services.AddScoped<AnimalService>();
 builder.Services.AddScoped<ButcherService>();
 builder.Services.AddScoped<FarmerService>();
+builder.Services.AddScoped<AuthService>();
 
+builder.Services.AddDefaultIdentity<Database.Entities.User>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ButcherDatabase>();
+
+builder.Services.AddSession();
 
 //builder.Services.AddDbContext<ButcherDatabase>();
 
@@ -52,6 +56,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 

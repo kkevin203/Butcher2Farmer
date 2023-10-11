@@ -11,9 +11,6 @@ namespace Services
     public class FarmerService
     {
         private ButcherDatabase _butcherDatabase;
-
-       
-
         public FarmerService(ButcherDatabase butcherDatabase)
         {
             _butcherDatabase = butcherDatabase;
@@ -36,9 +33,7 @@ namespace Services
             var farmer = _butcherDatabase.Farmers.FirstOrDefault(f => f.Id == farmerId);
             return farmer;
         }
-        
-
-       
+      
         public async Task<List<Farmer>> GetFarmersAsync()
         {
             try
@@ -52,6 +47,18 @@ namespace Services
                 throw;
             }
         }
+        public async Task CreateFarmerAsync(Farmer newFarmer)
+        {
+            try
+            {
+                _butcherDatabase.Farmers.Add(newFarmer);
+                await _butcherDatabase.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
 
+                throw;
+            }
+        }
     }
 }

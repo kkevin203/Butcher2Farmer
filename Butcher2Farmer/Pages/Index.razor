@@ -1,25 +1,16 @@
 ﻿@page "/"
 
+@using Microsoft.AspNetCore.Identity;
+@using Microsoft.AspNetCore.Authentication;
 
+@inject AuthService authService
+@inject SignInManager<IdentityUser> signInManager
+@inject NavigationManager navigationManager
 
 <PageTitle>Index</PageTitle>
+ <h4> Bienvenue sur l'application Butcher2Farmer</h4>
+ <h2> La premiere application qui met en relation directement les boucher et les éleveur</h2>
 
 
 
 
-
-<br />
-<div class="alert alert-danger" role="alert">
-    ERREUR : Ce compte est invalide
-</div>
-<br />
-
-<h1>Vous devez vous authentifier. </h1>
-
-<form method="post">
-    <input type="text" name="username" placeholder="Login"><br /><br />
-    <input type="password" name="password" placeholder="Mot de passe"><br /><br />
-    <NavLink class="nav-link" href="ButcherRegistration">S'enregistrer comme boucher</NavLink>
-    <NavLink class="nav-link" href="FarmerRegistration">S'enregistrer comme Farmer</NavLink>
-    <button>Se connecter</button>  
-</form>

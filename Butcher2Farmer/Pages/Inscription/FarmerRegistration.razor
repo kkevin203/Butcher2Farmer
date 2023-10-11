@@ -3,12 +3,16 @@
 @using Database
 @using Database.Entities;
 @using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Identity;
 @using Models;
+@using System.Security.Claims;
 
-@inject NavigationManager NavigationManager
-@inject FarmerService farmerService
 
 @inject ButcherDatabase dbContext
+@inject NavigationManager NavigationManager
+@inject FarmerService FarmerService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<User> UserManager
 
 <h3>Inscription Agriculteur</h3>
 
@@ -77,31 +81,56 @@
     private Farmer farmer = new Farmer();
     private List<Database.Entities.Farmer> farmers = new();
     private List<Database.Entities.Farmer> filteredFarmers = new List<Database.Entities.Farmer>();
-
-
+    private string errorMessage = null;
 
     private bool isSubmitted = false;
 
 
     private async Task HandleSubmit()
     {
-           
-            dbContext.Farmers.Add(farmer);
-            await dbContext.SaveChangesAsync();
+        try
+        {
+            await FarmerService.CreateFarmerAsync(farmer);
+            isSubmitted = true;
 
-            farmers.Add(farmer);
+            var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authenticationState.User;
 
-            farmer = new Farmer();
+            if (user != null)
+            {
+                var newUser = new User
+                    {
+                        Email = user.FindFirst(ClaimTypes.Email)?.Value,
+                    };
 
-        NavigationManager.NavigateTo("/addanimal");
-       
+                var result = await UserManager.CreateAsync(newUser);
+
+                if (result.Succeeded)
+                {
+                    NavigationManager.NavigateTo("/addanimal");
+                }
+                else
+                {
+                    errorMessage = "Erreur lors de la création de l'utilisateur.";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Une erreur s'est produite : " + ex.Message;
+        }
     }
 
     protected override async Task OnInitializedAsync()
     {
-        farmers = await farmerService.GetFarmersAsync();
+        farmers = await FarmerService.GetFarmersAsync();
     }
 
-    
+
 }
+
+    
+
+    
+
 

@@ -23,7 +23,6 @@ namespace Services
             try
             {
                 return await _butcherDatabase.Butchers.ToListAsync();
-
             }
             catch (Exception ex)
             {
@@ -51,14 +50,11 @@ namespace Services
         {
             try
             {
-
-
                 _butcherDatabase.Butchers.Add(newButcher);
                 await _butcherDatabase.SaveChangesAsync();
             }
             catch (Exception ex)
-            {
-               
+            {    
                 throw;
             }
         }
