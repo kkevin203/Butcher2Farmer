@@ -20,8 +20,8 @@ else
             <tr>
                 <th>Id</th>
                 <th>Name</th>
+                <th>FirstName</th>
                 <th>Email</th>
-                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -30,6 +30,7 @@ else
                 <tr>
                     <td>@farmer.Id</td>
                     <td>@farmer.Name</td>
+                    <td>@farmer.FirstName</td>
                     <td>@farmer.Email</td>
                     <button @onclick="() => SelectFarmer(farmer)">Select Farmer</button>
                 </tr>

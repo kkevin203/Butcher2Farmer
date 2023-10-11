@@ -1,0 +1,98 @@
+﻿@page "/ButcherRegistration"
+
+@using Database
+@using Database.Entities;
+@using Microsoft.AspNetCore.Components.Forms
+@using Models;
+
+@inject NavigationManager NavigationManager
+@inject ButcherService ButcherService
+
+<h3>ButcherRegistration</h3>
+
+<EditForm Model="@butcher" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="FirstName">Prénom</label>
+        <input type="text" id="FirstName" class="form-control" @bind="butcher.FirstName" />
+        <ValidationMessage For="@(() => butcher.FirstName)" />
+    </div>
+
+    <div class="form-group">
+        <label for="Name">Nom de famille</label>
+        <input type="text" id="Name" class="form-control" @bind="butcher.Name" />
+        <ValidationMessage For="@(() => butcher.Name)" />
+
+    </div>
+    <div class="form-group">
+        <label for="Age">Age</label>
+        <input type="text" id="Age" class="form-control" @bind="butcher.Age" />
+        <ValidationMessage For="@(() => butcher.Age)" />
+    </div>
+    <div class="form-group">
+        <label for="Adress">Adresse</label>
+        <input type="text" id="Adress" class="form-control" @bind="butcher.Adress" />
+        <ValidationMessage For="@(() => butcher.Adress)" />
+
+    </div>
+    <div class="form-group">
+        <label for="Tel">Tel</label>
+        <input type="text" id="Tel" class="form-control" @bind="butcher.Tel" />
+        <ValidationMessage For="@(() => butcher.Tel)" />
+
+    </div>
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input type="text" id="Email" class="form-control" @bind="butcher.Email" />
+        <ValidationMessage For="@(() => butcher.Email)" />
+
+    </div>
+    <div class="form-group">
+        <label for="Adress">Specialization</label>
+        <input type="text" id="Specialization" class="form-control" @bind="butcher.Specialization" />
+        <ValidationMessage For="@(() => butcher.Specialization)" />
+
+    </div>
+    <div class="form-group">
+        <label for="RaceFavorite">RaceFavorite</label>
+        <input type="text" id="RaceFavorite" class="form-control" @bind="butcher.RaceFavorite" />
+        <ValidationMessage For="@(() => butcher.RaceFavorite)" />
+
+    </div>
+    <div class="form-group">
+        <label for="PhotoPath">PhotoPath</label>
+        <input type="text" id="PhotoPath" class="form-control" @bind="butcher.PhotoPath" />
+        <ValidationMessage For="@(() => butcher.PhotoPath)" />
+
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">S'inscrire</button>
+</EditForm>
+
+
+@code {
+    private Butcher butcher = new Butcher();
+    private List<Database.Entities.Butcher> butchers = new List<Database.Entities.Butcher>(); 
+
+    private bool isSubmitted = false;
+
+
+    private async Task HandleSubmit()
+    {
+
+        await ButcherService.CreateButcherAsync(butcher);
+        isSubmitted = true;
+
+        NavigationManager.NavigateTo("/animals");
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        butchers = await ButcherService.GetButcherAsync(); 
+    }
+
+
+}
+

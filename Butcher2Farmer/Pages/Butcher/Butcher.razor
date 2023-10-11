@@ -1,7 +1,14 @@
 ﻿@page "/butcher"
+
+@using Database.Entities;
+@using Microsoft.AspNetCore.Components;
+
 @inject ButcherService butcherService
 
 <h3>Butcher</h3>
+
+<input type="text" @oninput="FilterButchers" placeholder="Search by name..." />
+
 @if (butchers == null)
 {
     <p><em>Loading...</em></p>
@@ -13,6 +20,7 @@ else
             <tr>
                 <th>Id</th>
                 <th>Name</th>
+                <th>FirstName</th>
                 <th>Email</th>
             </tr>
         </thead>
@@ -22,8 +30,9 @@ else
                 <tr>
                     <td>@forecast.Id</td>
                     <td>@forecast.Name</td>
+                    <td>@forecast.FirstName</td>
                     <td>@forecast.Email</td>
-
+                    <button @onclick="() => SelectButcher(forecast)">Select butcher</button>
                 </tr>
             }
         </tbody>
@@ -31,11 +40,40 @@ else
 }
 
 @code {
-    List<Database.Entities.Butcher> butchers = new();
-    protected override Task OnInitializedAsync()
-    {
-        butchers = butcherService.GetAll();
+    List<Database.Entities.Butcher> butchers;
+    List<Database.Entities.Butcher> filterdButchers = new List<Database.Entities.Butcher>();
+    string selectedButcherName;
 
-        return base.OnInitializedAsync();
+    private void SelectButcher(Database.Entities.Butcher selectedButcher)
+    {
+        selectedButcherName = selectedButcher.Name;
+        ClearFilteredButchers();
+    }
+    private void ClearFilteredButchers()
+    {
+        filterdButchers.Clear();
+    }
+    private void FilterButchers(ChangeEventArgs args)
+    {
+        string searchText = args.Value.ToString();
+
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            filterdButchers = butchers;
+        }
+        else
+        {
+            filterdButchers = butchers
+             .Where(butcher =>
+             butcher.Name
+             .Contains(searchText, StringComparison.OrdinalIgnoreCase))
+             .ToList();
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+ 
+        butchers = await butcherService.GetButcherAsync();
+        filterdButchers = butchers;
     }
 }
